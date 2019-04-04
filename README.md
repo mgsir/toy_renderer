@@ -63,11 +63,11 @@
 
 ## 最后
 
-欣赏一下我在实现「渲染器」踩过的[坑]()吧！
+欣赏一下我在实现「渲染器」踩过的[坑](https://github.com/TensShinet/toyrenderer/tree/master/image)吧！
 
 
 
-扫个码我们做朋友吧！
+扫个码我们做朋友吧！**顺便点个 star 呗！**
 
 ![](https://github.com/TensShinet/learn_statistical-learning-method/blob/master/images/wx.png?raw=true)
 
