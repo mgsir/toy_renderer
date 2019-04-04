@@ -1,3 +1,6 @@
+#ifndef __GEOMETRY_H__
+#define __GEOMETRY_H__
+
 #include <iostream>
 #include <cassert>
 #include <cmath>
@@ -69,6 +72,12 @@ template <size_t DIM, typename T> T operator*(const vec<DIM, T>& lv, const vec<D
     return res;
 }
 
+template<size_t DIM,typename T,typename U> vec<DIM,T> operator*(vec<DIM,T> lv, const U& n) {
+    for (size_t i=DIM; i--; lv[i]*=n);
+    return lv;
+}
+
+
 // 加法
 template <size_t DIM, typename T> vec<DIM, T> operator+(vec<DIM, T>lv, const vec<DIM, T>& rv) {
     for(size_t i = DIM; i--; lv[i] += rv[i]);
@@ -109,18 +118,19 @@ template <size_t DIM, typename T, typename U> vec<DIM, T> operator/(vec<DIM, T>l
 }
 
 // 变换成齐次坐标
-template <size_t LEN, size_t DIM, typename T> vec<DIM, T> embed(vec<DIM, T>& v, T fill = 1) {
+template <size_t LEN, size_t DIM, typename T> vec<LEN, T> embed(const vec<DIM, T>& v, T fill = 1) {
     vec<LEN, T> ret;
     for(size_t i = LEN; i--; ret[i] = (i < DIM ? v[i] : fill) );
     return ret;
 }
 
 // 这里的 LEN 比 DIM 要小
-template <size_t LEN, size_t DIM, typename T> vec<LEN, T> cut(vec<DIM, T>& v) {
+template <size_t LEN, size_t DIM, typename T> vec<LEN, T> cut(const vec<DIM, T> &v) {
     vec<LEN, T> ret;
     for(size_t i = LEN; i--; ret[i] = v[i]);
     return ret;
 }
+
 
 // 向量叉乘
 template <typename T> vec<3,T> cross(vec<3,T> v1, vec<3,T> v2) {
@@ -168,7 +178,7 @@ template <size_t Rows, size_t Cols, typename T> class mat {
         }
 
         // 得到某一列
-        vec<Rows, T> col(const size_t idx) {
+        vec<Rows, T> col(const size_t idx) const {
             assert(idx < Cols);
             vec<Rows, T> ret;
             for(size_t i = Rows; i--; ret[i] = rows[i][idx]);
@@ -252,7 +262,13 @@ template<size_t Rows,size_t Cols,typename T> vec<Rows,T> operator*(const mat<Row
 template<size_t R1,size_t C1,size_t C2,typename T>mat<R1,C2,T> operator*(const mat<R1,C1,T>& lhs, const mat<C1,C2,T>& rhs) {
     mat<R1,C2,T> result;
     for (size_t i=R1; i--; )
-        for (size_t j=C2; j--; result[i][j]=lhs[i]*rhs.col(j));
+        for (size_t j=C2; j--; ) {
+            
+            vec<C1, T> t = lhs[i];
+            vec<C1, T> t2 = rhs.col(j);
+
+            result[i][j] = t * t2;
+        }
     return result;
 }
 
@@ -270,3 +286,4 @@ typedef vec<3, float> Vec3f;
 typedef vec<4, float> Vec4f;
 typedef mat<4, 4, float> Matrix;
 
+#endif

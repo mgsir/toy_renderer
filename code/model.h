@@ -1,4 +1,7 @@
 
+#ifndef __MODEL_H__
+#define __MODEL_H__
+
 #include <vector>
 
 #include "geometry.h"
@@ -16,9 +19,12 @@ class Model {
         void load_texture(std::string filename, const char *suffix, TGAImage &img);
 
     public:
+
         Model(const char *filepath);
         ~Model();
         int nfaces();
         int nverts();
-        
+        Vec3f vert(int nthface, int nthvert);
 };
+
+#endif

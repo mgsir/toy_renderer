@@ -81,6 +81,10 @@ Model::Model(const char* filepath) : verts_(), uv_(), norms_(), faces_(), diffus
             Vec3i v;
             std::vector <Vec3i> f;
             while(iss >> v[0] >> trash >> v[1] >> trash >> v[2]) {
+                // f 索引从 1 开始的
+                v[0]--;
+                v[1]--;
+                v[2]--;
                 f.push_back(v);
             }
             faces_.push_back(f);
@@ -104,5 +108,22 @@ void Model::load_texture(std::string filepath, const char *suffix, TGAImage &img
     if(dot_idx != std::string::npos) {
         file = filepath.substr(0, dot_idx) + std::string(suffix);
         std::cerr << "加载 " << file << (img.read_tga_file(file.c_str()) ? "成功" : "失败") << std::endl;
+        img.flip_vertically();
     }
 }
+
+int Model::nverts() {
+    return verts_.size();
+}
+
+
+int Model::nfaces() {
+    return faces_.size();
+}
+
+Vec3f Model::vert(int nthface, int nthvert) {
+    int vert_idx = faces_[nthface][nthvert][0];
+    return verts_[vert_idx];
+}
+
+
