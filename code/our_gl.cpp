@@ -11,19 +11,6 @@ Matrix Viewport;
 
 IShader::~IShader() {}
 
-
-// void viewport(int x, int y, int w, int h) {
-//     Viewport = Matrix::identity();
-//     Viewport[0][0] = w;
-//     Viewport[1][1] = h;
-//     Viewport[2][2] = depth/2;
-//     Viewport[3][3] = 1;
-
-//     Viewport[0][3] = x;
-//     Viewport[1][3] = y;
-//     Viewport[2][3] = depth/2;
-// }
-
 void viewport(int x, int y, int w, int h) {
     Viewport = Matrix::identity();
     Viewport[0][3] = x+w/2.f;
@@ -36,7 +23,7 @@ void viewport(int x, int y, int w, int h) {
 
 void projection(float c) {
     Projection = Matrix::identity();
-    Projection[2][3] = c;
+    Projection[3][2] = c;
 }
 
 // 通过右手法则判断方向

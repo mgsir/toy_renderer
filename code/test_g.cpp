@@ -54,7 +54,7 @@ void test_vec() {
 }
 
 void test_mat() {
-        Matrix m = Matrix::identity(); 
+    Matrix m = Matrix::identity(); 
     assert(m[0][0] == m[1][1] == m[2][2] == m[3][3] == 1 && m[0][1] == 0 && m[0][2] == 0);
     std::cout<< "单位矩阵测试成功" <<'\n';
 

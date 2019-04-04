@@ -51,6 +51,7 @@ Model::Model(const char* filepath) : verts_(), uv_(), norms_(), faces_(), diffus
 
         // 比较每一行前的字符
         if(!line.compare(0, 2, "v ")) {
+
             iss >> trash;
             Vec3f v;
             for(size_t i = 0; i < 3; i++) {
@@ -59,10 +60,11 @@ Model::Model(const char* filepath) : verts_(), uv_(), norms_(), faces_(), diffus
             verts_.push_back(v);
 
         } else if(!line.compare(0, 3, "vt ")) {
+
             iss >> trash >> trash;
 
-            Vec3f v;
-            for(size_t i = 0; i < 3; i++) {
+            Vec2f v;
+            for(size_t i = 0; i < 2; i++) {
                 iss >> v[i];
             }
             uv_.push_back(v);
@@ -77,6 +79,7 @@ Model::Model(const char* filepath) : verts_(), uv_(), norms_(), faces_(), diffus
             norms_.push_back(v);
 
         } else if(!line.compare(0, 2, "f ")) {
+
             iss >> trash;
             Vec3i v;
             std::vector <Vec3i> f;
@@ -126,4 +129,26 @@ Vec3f Model::vert(int nthface, int nthvert) {
     return verts_[vert_idx];
 }
 
+Vec2f Model::uv(int nthface, int nthvert) {
+    int vert_idx = faces_[nthface][nthvert][1];
+    return uv_[vert_idx];
+}
 
+TGAColor Model::diffuse(Vec2f uvf) {
+    Vec2i uv(uvf[0]*diffusemap_.get_width(), uvf[1]*diffusemap_.get_height());
+    return diffusemap_.get(uv[0], uv[1]);
+}
+
+Vec3f Model::normal(Vec2f uvf) {
+    Vec2i uv(uvf[0]*normalmap_.get_width(), uvf[1]*normalmap_.get_height());
+    TGAColor c = normalmap_.get(uv[0], uv[1]);
+    Vec3f res;
+    for (int i=0; i<3; i++)
+        res[2-i] = (float)c[i]/255.f*2.f - 1.f;
+    return res;
+}
+
+float Model::specular(Vec2f uvf) {
+    Vec2i uv(uvf[0]*specularmap_.get_width(), uvf[1]*specularmap_.get_height());
+    return specularmap_.get(uv[0], uv[1])[0]/1.f;
+}
