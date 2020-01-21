@@ -22,8 +22,6 @@
         贴图着色器
             不实现贴图
             (255, 255, 255) * 强度
-        
-
 2. 实现贴图
 */
 
@@ -43,7 +41,7 @@ float *zbuffer = new float[width * height];
 float *shadowbuffer = new float[width * height];
 
 // 眼睛位置
-Vec3f eye(-1, 2, 4);
+Vec3f eye(0, 0, 10);
 // 光照方向
 Vec3f light_dir(1, 1, 3);
 // 中心
